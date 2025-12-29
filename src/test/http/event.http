@@ -1,0 +1,40 @@
+### Get all events
+GET http://localhost:8080/api/events
+
+### Get event by ID
+GET http://localhost:8080/api/events/1
+
+### Get events by club ID
+GET http://localhost:8080/api/events/club/1
+
+### Create new event
+POST http://localhost:8080/api/events/new
+Content-Type: application/json
+
+{
+  "name": "Spring Boot Workshop",
+  "location": "Tech Hub Building A",
+  "description": "Learn Spring Boot fundamentals and build REST APIs",
+  "imageUrl": "https://example.com/event-image.jpg",
+  "startDtateTime": "2025-01-15T10:00:00",
+  "endDtateTime": "2025-01-15T16:00:00",
+  "clubId": 1
+}
+
+### Update event
+PUT http://localhost:8080/api/events/1
+Content-Type: application/json
+
+{
+  "name": "Advanced Spring Boot Workshop",
+  "location": "Tech Hub Building B",
+  "description": "Advanced Spring Boot topics and microservices",
+  "imageUrl": "https://example.com/updated-event-image.jpg",
+  "startDtateTime": "2025-01-20T10:00:00",
+  "endDtateTime": "2025-01-20T17:00:00",
+  "clubId": 1
+}
+
+### Delete event
+DELETE http://localhost:8080/api/events/1/delete
+

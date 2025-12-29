@@ -3,36 +3,36 @@ package com.rungroop.web.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
-@Table(name = "clubs")
-public class Club {
+@Table(name = "events")
+public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
-    private String photoUrl;
-    private String content;
+    private String name;
+    private String location;
+    private String description;
+    private String imageUrl;
+    private LocalDateTime startDtateTime;
+    private LocalDateTime endDtateTime;
 
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDateTime createdOn;
     @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedOn;
 
-    @OneToMany(mappedBy = "club", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private Set<Event> events = new HashSet<>();
+    @ManyToOne()
+    @JoinColumn(name = "club_id", nullable = false)
+    private Club club;
 }
