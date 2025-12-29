@@ -85,21 +85,21 @@ public class EventServiceImpl implements EventService {
     }
 
     private Event mapToEvent(EventDto eventDto) {
-        Event event = new Event();
-        event.setName(eventDto.getName());
-        event.setLocation(eventDto.getLocation());
-        event.setDescription(eventDto.getDescription());
-        event.setImageUrl(eventDto.getImageUrl());
-        event.setStartDtateTime(eventDto.getStartDtateTime());
-        event.setEndDtateTime(eventDto.getEndDtateTime());
-
+        Club club = null;
         if (eventDto.getClubId() != null) {
-            Club club = clubRepository.findById(eventDto.getClubId())
+            club = clubRepository.findById(eventDto.getClubId())
                     .orElseThrow(() -> new RuntimeException("Club not found with id: " + eventDto.getClubId()));
-            event.setClub(club);
         }
 
-        return event;
+        return Event.builder()
+                .name(eventDto.getName())
+                .location(eventDto.getLocation())
+                .description(eventDto.getDescription())
+                .imageUrl(eventDto.getImageUrl())
+                .startDtateTime(eventDto.getStartDtateTime())
+                .endDtateTime(eventDto.getEndDtateTime())
+                .club(club)
+                .build();
     }
 
     private EventDto mapToEventDto(Event event) {
