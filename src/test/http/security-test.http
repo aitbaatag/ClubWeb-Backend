@@ -1,0 +1,145 @@
+### ========================================
+### SPRING SECURITY TEST SUITE
+### Testing Authentication & Authorization
+### Note: Use user.http for user registration/login tests
+### ========================================
+
+### ========================================
+### PROTECTED ENDPOINTS - Should Return 401 Without Auth
+### ========================================
+
+### Test 1: View All Clubs Without Auth (Should FAIL with 401)
+GET http://localhost:8080/api/clubs
+
+### Test 2: View Specific Club Without Auth (Should FAIL with 401)
+GET http://localhost:8080/api/clubs/1
+
+### Test 3: View All Events Without Auth (Should FAIL with 401)
+GET http://localhost:8080/api/events
+
+### Test 4: View Specific Event Without Auth (Should FAIL with 401)
+GET http://localhost:8080/api/events/1
+
+### Test 5: Create Club Without Auth (Should FAIL with 401)
+POST http://localhost:8080/api/clubs/new
+Content-Type: application/json
+
+{
+  "title": "Test Club",
+  "photoUrl": "https://example.com/photo.jpg",
+  "content": "Test club content"
+}
+
+### Test 6: Update Club Without Auth (Should FAIL with 401)
+PUT http://localhost:8080/api/clubs/1
+Content-Type: application/json
+
+{
+  "title": "Updated Club",
+  "photoUrl": "https://example.com/new-photo.jpg",
+  "content": "Updated content"
+}
+
+### Test 7: Delete Club Without Auth (Should FAIL with 401)
+DELETE http://localhost:8080/api/clubs/1/delete
+
+### Test 8: Create Event Without Auth (Should FAIL with 401)
+POST http://localhost:8080/api/events/new
+Content-Type: application/json
+
+{
+  "name": "Test Event",
+  "location": "Test Location",
+  "description": "Test Description",
+  "imageUrl": "https://example.com/event.jpg",
+  "startDtateTime": "2025-01-15T10:00:00",
+  "endDtateTime": "2025-01-15T16:00:00",
+  "clubId": 1
+}
+
+### ========================================
+### AUTHENTICATED REQUESTS - With HTTP Basic Auth
+### ========================================
+### Note: Replace "testuser:Password123!" with your actual username:password
+### The format is: Authorization: Basic base64(username:password)
+
+### Test 9: View All Clubs WITH Auth (Should Work)
+GET http://localhost:8080/api/clubs
+Authorization: Basic am9obmRvZTpTZWN1cmVQYXNzd29yZDEyMyE=
+
+### Test 10: View Specific Club WITH Auth (Should Work)
+GET http://localhost:8080/api/clubs/1
+Authorization: Basic am9obmRvZTpTZWN1cmVQYXNzd29yZDEyMyE=
+
+### Test 11: View All Events WITH Auth (Should Work)
+GET http://localhost:8080/api/events
+Authorization: Basic am9obmRvZTpTZWN1cmVQYXNzd29yZDEyMyE=
+
+### Test 12: Create Club WITH Auth (Should Work)
+POST http://localhost:8080/api/clubs/new
+Content-Type: application/json
+Authorization: Basic am9obmRvZTpTZWN1cmVQYXNzd29yZDEyMyE=
+
+{
+  "title": "Authenticated Club",
+  "photoUrl": "https://example.com/photo.jpg",
+  "content": "Created with authentication"
+}
+
+### Test 13: Update Club WITH Auth (Should Work)
+PUT http://localhost:8080/api/clubs/1
+Content-Type: application/json
+Authorization: Basic am9obmRvZTpTZWN1cmVQYXNzd29yZDEyMyE=
+
+{
+  "title": "Updated with Auth",
+  "photoUrl": "https://example.com/new-photo.jpg",
+  "content": "Updated with authentication"
+}
+
+### Test 14: Create Event WITH Auth (Should Work)
+POST http://localhost:8080/api/events/new
+Content-Type: application/json
+Authorization: Basic am9obmRvZTpTZWN1cmVQYXNzd29yZDEyMyE=
+
+{
+  "name": "Authenticated Event",
+  "location": "Test Location",
+  "description": "Created with authentication",
+  "imageUrl": "https://example.com/event.jpg",
+  "startDtateTime": "2025-01-15T10:00:00",
+  "endDtateTime": "2025-01-15T16:00:00",
+  "clubId": 1
+}
+
+### Test 15: Delete Club WITH Auth (Should Work)
+DELETE http://localhost:8080/api/clubs/2/delete
+Authorization: Basic am9obmRvZTpTZWN1cmVQYXNzd29yZDEyMyE=
+
+### ========================================
+### INVALID AUTHENTICATION TESTS
+### ========================================
+
+### Test 16: Wrong Password (Should FAIL with 401)
+POST http://localhost:8080/api/clubs/new
+Content-Type: application/json
+Authorization: Basic dGVzdHVzZXI6V3JvbmdQYXNzd29yZA==
+
+{
+  "title": "Test Club",
+  "photoUrl": "https://example.com/photo.jpg",
+  "content": "Test content"
+}
+
+### ========================================
+### HOW TO GET YOUR OWN BASIC AUTH TOKEN
+### ========================================
+### 1. Go to: https://www.base64encode.org/
+### 2. Enter: username:password (e.g., testuser:Password123!)
+### 3. Click "Encode"
+### 4. Copy the result and use it in: Authorization: Basic YOUR_TOKEN_HERE
+###
+### OR use this command in terminal:
+### echo -n "username:password" | base64
+
+

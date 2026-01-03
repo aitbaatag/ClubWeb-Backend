@@ -20,7 +20,7 @@ Content-Type: application/json
 
 
 ### Find a club by ID
-GET http://localhost:8080/api/clubs/2
+GET http://localhost:8080/api/clubs/1
 
 
 ### Delete a club by ID

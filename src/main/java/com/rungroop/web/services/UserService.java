@@ -1,9 +1,11 @@
 package com.rungroop.web.services;
 
 import com.rungroop.web.dto.RegistrationDto;
+import com.rungroop.web.dto.UserDto;
 
 public interface UserService {
-    void SaveUser(RegistrationDto registrationDto);
-    void addRoleToUser(Long userId, String roleName);
-    void removeRoleFromUser(Long userId, String roleName);
+    boolean SaveUser(RegistrationDto registrationDto);
+    UserDto getUserById(Long id);
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
 }

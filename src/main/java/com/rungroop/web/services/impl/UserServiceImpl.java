@@ -1,74 +1,76 @@
 package com.rungroop.web.services.impl;
 
+import com.rungroop.web.dto.RegistrationDto;
+import com.rungroop.web.dto.UserDto;
 import com.rungroop.web.models.Role;
 import com.rungroop.web.models.User;
 import com.rungroop.web.repository.RoleRepository;
 import com.rungroop.web.repository.UserRepository;
 import com.rungroop.web.services.UserService;
-import com.rungroop.web.dto.RegistrationDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
-    UserRepository userRepository;
-    RoleRepository roleRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public void SaveUser(RegistrationDto registrationDto) {
-        User user = new User();
-        user.setUsername(registrationDto.getUsername());
-        user.setPassword(registrationDto.getPassword());
-        user.setEmail(registrationDto.getEmail());
+    public boolean SaveUser(RegistrationDto registrationDto) {
+        if (userRepository.findByUsername(registrationDto.getUsername()) != null) {
+            return false;
+        }
+
+        if (userRepository.findByEmail(registrationDto.getEmail()) != null) {
+            return false;
+        }
 
         Role userRole = roleRepository.findByName("USER");
+
+        User user = new User();
+        user.setUsername(registrationDto.getUsername());
+        user.setFirstName(registrationDto.getFirstName());
+        user.setLastName(registrationDto.getLastName());
+        user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
+        user.setEmail(registrationDto.getEmail());
         user.getRoles().add(userRole);
-        // Role adminRole = roleRepository.findByName("ADMIN");
-        // user.getRoles().add(adminRole);
 
         userRepository.save(user);
+        return true;
     }
 
     @Override
-    public void addRoleToUser(Long userId, String roleName) {
-        // Find the user
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
-
-        // Find the role
-        Role role = roleRepository.findByName(roleName);
-        if (role == null) {
-            throw new RuntimeException("Role not found: " + roleName);
-        }
-
-        // Add the role to the user's roles
-        user.getRoles().add(role);
-
-        userRepository.save(user);
+    public boolean existsByUsername(String username) {
+        return userRepository.findByUsername(username) != null;
     }
 
     @Override
-    public void removeRoleFromUser(Long userId, String roleName) {
-        // Find the user
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+    public boolean existsByEmail(String email) {
+        return userRepository.findByEmail(email) != null;
+    }
 
-        // Find the role
-        Role role = roleRepository.findByName(roleName);
-        if (role == null) {
-            throw new RuntimeException("Role not found: " + roleName);
-        }
+    @Override
+    public UserDto getUserById(Long Id)
+    {
+        User user = userRepository.findById(Id).orElseThrow(() -> new RuntimeException("User not found"));
+        return mapToUserDto(user);
+    }
 
-        // Remove the role from the user's roles
-        user.getRoles().remove(role);
-
-        userRepository.save(user);
-
+    private UserDto mapToUserDto(User user) {
+        return UserDto.builder()
+                .id(user.getId())
+                .FirstName(user.getFirstName())
+                .LastName(user.getLastName())
+                .username(user.getUsername())
+                .build();
     }
 }

@@ -1,0 +1,27 @@
+### Get user by ID
+GET http://localhost:8080/api/auth/user/1
+
+### Register new user
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "FirstName": "John",
+  "LastName": "Doe",
+  "email": "johndoe@example.com",
+  "password": "SecurePassword123!"
+}
+
+### Register new user with different credentials
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "janedoe",
+  "FirstName": "Jane",
+  "LastName": "Doe",
+  "email": "janedoe@example.com",
+  "password": "AnotherSecure123!"
+}
+
