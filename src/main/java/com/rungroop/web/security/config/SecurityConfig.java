@@ -28,6 +28,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        // allow only users with role USER to access events endpoints
+                        .requestMatchers("/api/events/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());

@@ -24,15 +24,4 @@ public class UserController {
         UserDto userDto = userService.getUserById(id);
         return ResponseEntity.ok(userDto);
     }
-
-    @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody RegistrationDto userRegistrationDto) {
-        boolean isCreated = userService.SaveUser(userRegistrationDto);
-
-        if (isCreated) {
-            return ResponseEntity.ok("User registered successfully");
-        } else {
-            return ResponseEntity.badRequest().body("Failed to create user. Please try again.");
-        }
-    }
 }

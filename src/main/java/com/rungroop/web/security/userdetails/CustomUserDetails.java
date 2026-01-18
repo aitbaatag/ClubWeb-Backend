@@ -17,12 +17,11 @@ public class CustomUserDetails implements UserDetails {
         this.user = user;
     }
 
-    // Authorities (Roles)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return user.getRoles()
                 .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
                 .collect(Collectors.toSet());
     }
 
@@ -35,4 +34,6 @@ public class CustomUserDetails implements UserDetails {
     public String getUsername() {
         return user.getUsername();
     }
+
 }
+    // Default account flags - allow all (adjust if you add fields to User later)
