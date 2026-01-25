@@ -25,6 +25,10 @@ public class User {
     private String email;
     private String password;
 
+    // I add this relationship to fetch clubs created by the user
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Club> clubs = new HashSet<>();
+
     @ManyToMany(fetch = FetchType.EAGER) // This for loading roles with user
     @JoinTable(
             name = "user_roles",

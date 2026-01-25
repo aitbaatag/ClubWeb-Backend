@@ -2,9 +2,14 @@ package com.rungroop.web.services.impl;
 
 import com.rungroop.web.dto.ClubDto;
 import com.rungroop.web.models.Club;
+import com.rungroop.web.models.User;
 import com.rungroop.web.repository.ClubRepository;
+import com.rungroop.web.repository.UserRepository;
+import com.rungroop.web.security.userdetails.CustomUserDetails;
 import com.rungroop.web.services.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +21,12 @@ public class ClubServiceImpl  implements ClubService {
     @Autowired
     private final ClubRepository clubRepository;
 
-    public ClubServiceImpl(ClubRepository clubRepository) {
+    @Autowired
+    private final UserRepository userRepository;
+
+    public ClubServiceImpl(ClubRepository clubRepository, UserRepository userRepository) {
         this.clubRepository = clubRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -41,8 +50,10 @@ public class ClubServiceImpl  implements ClubService {
     }
 
     @Override
-    public ClubDto createClub(ClubDto clubDto) {
+    public ClubDto createClub(ClubDto clubDto, User currentUser) {
+
         Club club = mapToClub(clubDto);
+        club.setOwner(currentUser);
         Club saved = clubRepository.save(club);
         return mapToClubDto(saved);
     }
@@ -85,6 +96,8 @@ public class ClubServiceImpl  implements ClubService {
                 .content(club.getContent())
                 .createdAt(club.getCreatedAt())
                 .updatedAt(club.getUpdatedAt())
+                .ownerId(club.getOwner() != null ? club.getOwner().getId() : null)
+                .ownerUsername(club.getOwner() != null ? club.getOwner().getUsername() : null)
                 .build();
     }
 }

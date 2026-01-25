@@ -21,4 +21,6 @@ public class ClubDto {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Long ownerId;
+    private String ownerUsername;
 }

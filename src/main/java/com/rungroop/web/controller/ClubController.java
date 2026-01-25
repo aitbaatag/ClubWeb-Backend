@@ -1,10 +1,12 @@
 package com.rungroop.web.controller;
 
 import com.rungroop.web.dto.ClubDto;
+import com.rungroop.web.security.userdetails.CustomUserDetails;
 import com.rungroop.web.services.ClubService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,8 +33,8 @@ public class ClubController {
         return new ResponseEntity<>(club, HttpStatus.OK);
     }
     @PostMapping("/new")
-    public ResponseEntity<ClubDto> createClub(@Valid @RequestBody ClubDto clubDto) {
-        ClubDto savedClub = clubService.createClub(clubDto);
+    public ResponseEntity<ClubDto> createClub(@Valid @RequestBody ClubDto clubDto, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        ClubDto savedClub = clubService.createClub(clubDto, userDetails.getUser());
         return new ResponseEntity<>(savedClub, HttpStatus.CREATED);
     }
 

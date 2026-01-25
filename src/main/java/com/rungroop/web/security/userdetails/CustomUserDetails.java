@@ -35,5 +35,9 @@ public class CustomUserDetails implements UserDetails {
         return user.getUsername();
     }
 
+    public User getUser() {
+        return user;
+    }
+
 }
     // Default account flags - allow all (adjust if you add fields to User later)
