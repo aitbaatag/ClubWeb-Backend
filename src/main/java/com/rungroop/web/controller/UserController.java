@@ -1,10 +1,8 @@
 package com.rungroop.web.controller;
 
 
-import com.rungroop.web.dto.RegistrationDto;
 import com.rungroop.web.dto.UserDto;
-import com.rungroop.web.services.UserService;
-import jakarta.validation.Valid;
+import com.rungroop.web.services.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,14 +12,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class UserController {
 
-    private final UserService userService;
+    private final AuthService authService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(AuthService authService) {
+        this.authService = authService;
     }
     @GetMapping("/user/{id}")
     public ResponseEntity<UserDto> listUsers(@PathVariable("id") Long id) {
-        UserDto userDto = userService.getUserById(id);
+        UserDto userDto = authService.getUserById(id);
         return ResponseEntity.ok(userDto);
     }
 }

@@ -1,8 +1,10 @@
 package com.rungroop.web.controller;
 
 
+import com.rungroop.web.dto.LoginDto;
 import com.rungroop.web.dto.RegistrationDto;
-import com.rungroop.web.services.UserService;
+import com.rungroop.web.models.User;
+import com.rungroop.web.services.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,20 +13,27 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
-    private final UserService userService;
+    private final AuthService authService;
 
-    public AuthController(UserService userService) {
-        this.userService = userService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@Valid @RequestBody RegistrationDto userRegistrationDto) {
-        boolean isCreated = userService.SaveUser(userRegistrationDto);
+        boolean isCreated = authService.Signup(userRegistrationDto);
 
         if (isCreated) {
             return ResponseEntity.ok("User registered successfully");
         } else {
             return ResponseEntity.badRequest().body("Failed to create user. Please try again.");
         }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+        User authenticatedUser = authService.authenticate(loginDto);
+        System.out.println(loginDto);
+        return ResponseEntity.ok("User logged in successfully");
     }
 }

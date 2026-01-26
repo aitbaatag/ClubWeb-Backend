@@ -1,31 +1,36 @@
 package com.rungroop.web.services.impl;
 
+import com.rungroop.web.dto.LoginDto;
 import com.rungroop.web.dto.RegistrationDto;
 import com.rungroop.web.dto.UserDto;
 import com.rungroop.web.models.Role;
 import com.rungroop.web.models.User;
 import com.rungroop.web.repository.RoleRepository;
 import com.rungroop.web.repository.UserRepository;
-import com.rungroop.web.services.UserService;
+import com.rungroop.web.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
     @Override
-    public boolean SaveUser(RegistrationDto registrationDto) {
+    public boolean Signup(RegistrationDto registrationDto) {
         if (userRepository.findByUsername(registrationDto.getUsername()) != null) {
             return false;
         }
@@ -46,6 +51,17 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
         return true;
+    }
+
+    @Override
+    public User authenticate(LoginDto loginDto) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginDto.getUsername(),
+                        loginDto.getPassword())
+        );
+        return userRepository.findByUsername(loginDto.getUsername())
+                .orElseThrow();
     }
 
     @Override
