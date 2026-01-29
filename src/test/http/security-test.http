@@ -1,87 +1,25 @@
-### ========================================
-### SPRING SECURITY TEST SUITE
-### Testing Authentication & Authorization
-### Note: Use user.http for user registration/login tests
-### ========================================
 
-### Test 9: View All Clubs WITH Auth (Should Work)
-GET http://localhost:8080/api/clubs
-Authorization: Basic am9obmRvZTpTZWN1cmVQYXNzd29yZDEyMyE=
-
-### Test 10: View Specific Club WITH Auth (Should Work)
-GET http://localhost:8080/api/clubs/1
-Authorization: Basic am9obmRvZTpTZWN1cmVQYXNzd29yZDEyMyE=
-
-### Test 11: View All Events WITH Auth (Should Work)
-GET http://localhost:8080/api/events
-Authorization: Basic am9obmRvZTpTZWN1cmVQYXNzd29yZDEyMyE=
-
-### Test 12: Create Club WITH Auth (Should Work)
+### Step 1: Create a Club (requires authentication)
 POST http://localhost:8080/api/clubs/new
 Content-Type: application/json
-#Authorization: Basic am9obmRvZTpTZWN1cmVQYXNzd29yZDEyMyE=
-Authorization: Basic amFuZWRvZTpBbm90aGVyU2VjdXJlMTIzIQ==
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzY5NzA4NTUxLCJleHAiOjE3Njk3MTIxNTF9.7_uSoW9eGb-NoGvVpjiQAV8HBMGO8Bbi63sgSugxP7k
 
 {
-  "title": "Handball Club",
-  "photoUrl": "https://example.com/photo.jpg",
-  "content": "A club for handball enthusiasts"
+  "title": "Morning Runners",
+  "content": "We run every morning at 6 AM",
+  "photoUrl": "https://example.com/photo.jpg"
 }
 
-### Test 13: Update Club WITH Auth (Should Work)
-PUT http://localhost:8080/api/clubs/1
-Content-Type: application/json
-Authorization: Basic am9obmRvZTpTZWN1cmVQYXNzd29yZDEyMyE=
-
-{
-  "title": "Updated with Auth",
-  "photoUrl": "https://example.com/new-photo.jpg",
-  "content": "Updated with authentication"
-}
-
-### Test 14: Create Event WITH Auth (Should Work)
-POST http://localhost:8080/api/events/new
-Content-Type: application/json
-Authorization: Basic am9obmRvZTpTZWN1cmVQYXNzd29yZDEyMyE=
-
-{
-  "name": "Authenticated Event",
-  "location": "Test Location",
-  "description": "Created with authentication",
-  "imageUrl": "https://example.com/event.jpg",
-  "startDtateTime": "2025-01-15T10:00:00",
-  "endDtateTime": "2025-01-15T16:00:00",
-  "clubId": 1
-}
-
-### Test 15: Delete Club WITH Auth (Should Work)
-DELETE http://localhost:8080/api/clubs/2/delete
-Authorization: Basic am9obmRvZTpTZWN1cmVQYXNzd29yZDEyMyE=
-
-### ========================================
-### INVALID AUTHENTICATION TESTS
-### ========================================
-
-### Test 16: Wrong Password (Should FAIL with 401)
-POST http://localhost:8080/api/clubs/new
-Content-Type: application/json
-Authorization: Basic dGVzdHVzZXI6V3JvbmdQYXNzd29yZA==
-
-{
-  "title": "Test Club",
-  "photoUrl": "https://example.com/photo.jpg",
-  "content": "Test content"
-}
-
-### ========================================
-### HOW TO GET YOUR OWN BASIC AUTH TOKEN
-### ========================================
-### 1. Go to: https://www.base64encode.org/
-### 2. Enter: username:password (e.g., testuser:Password123!)
-### 3. Click "Encode"
-### 4. Copy the result and use it in: Authorization: Basic YOUR_TOKEN_HERE
 ###
-### OR use this command in terminal:
-### echo -n "username:password" | base64
 
+### Step 2: Get Club by ID (use the ID from previous response)
+GET http://localhost:8080/api/clubs/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzY5NzA4NTUxLCJleHAiOjE3Njk3MTIxNTF9.7_uSoW9eGb-NoGvVpjiQAV8HBMGO8Bbi63sgSugxP7k
 
+###
+
+### Step 3: Get All Clubs
+GET http://localhost:8080/api/clubs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzY5NzA4NTUxLCJleHAiOjE3Njk3MTIxNTF9.7_uSoW9eGb-NoGvVpjiQAV8HBMGO8Bbi63sgSugxP7k

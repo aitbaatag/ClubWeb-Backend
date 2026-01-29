@@ -197,6 +197,7 @@ The project includes test files for API testing:
 - User profile management
 - File upload for club/event photos
 - Email notifications
+- Refresh token implementation
 - And more...
 
 ## 📝 License
@@ -215,7 +216,6 @@ To contribute or run in development mode:
 
 ## 🐛 Known Issues
 
-- JWT authentication flow is under implementation
 - File upload for photos not yet implemented (currently using URLs)
 
 ---
