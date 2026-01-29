@@ -4,6 +4,8 @@ package com.rungroop.web.controller;
 import com.rungroop.web.dto.UserDto;
 import com.rungroop.web.services.AuthService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -17,9 +19,12 @@ public class UserController {
     public UserController(AuthService authService) {
         this.authService = authService;
     }
-    @GetMapping("/user/{id}")
-    public ResponseEntity<UserDto> listUsers(@PathVariable("id") Long id) {
-        UserDto userDto = authService.getUserById(id);
+
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> authenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        UserDto userDto = (UserDto) authentication.getPrincipal();
         return ResponseEntity.ok(userDto);
     }
 }

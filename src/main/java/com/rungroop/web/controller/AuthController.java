@@ -32,8 +32,12 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
-        User authenticatedUser = authService.authenticate(loginDto);
-        System.out.println(loginDto);
+        try {
+            User authenticatedUser = authService.authenticate(loginDto);
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(401).body("Invalid username or password");
+        }
         return ResponseEntity.ok("User logged in successfully");
     }
 }
