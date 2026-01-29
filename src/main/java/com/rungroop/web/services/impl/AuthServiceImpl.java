@@ -61,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
                         loginDto.getPassword())
         );
         return userRepository.findByUsername(loginDto.getUsername())
-                .orElseThrow(() -> new RuntimeException("Wrong credentials"));
+                .orElseThrow();
     }
 
     @Override

@@ -39,4 +39,10 @@ public class JwtUtils {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
+
+    public long getExpirationTime() {
+        return Long.parseLong(EXEPIRATION);
+    }
+
 }

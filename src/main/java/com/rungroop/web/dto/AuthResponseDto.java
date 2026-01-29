@@ -6,8 +6,8 @@ import lombok.Data;
 @Data
 @Builder
 public class AuthResponseDto {
-    private String message;
     private Long userId;
     private String username;
     private String token;
+    private Long expiresIn;
 }
