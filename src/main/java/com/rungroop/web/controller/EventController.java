@@ -5,6 +5,7 @@ import com.rungroop.web.services.EventService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,8 +32,12 @@ public class EventController {
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
-    @PostMapping("/new")
-    public ResponseEntity<EventDto> createEvent(@Valid @RequestBody EventDto eventDto) {
+    @PostMapping("/club/{clubId}")
+    @PreAuthorize("@clubPermissionServiceImpl.canCreateEvent(#clubId, authentication.principal.id)")
+    public ResponseEntity<EventDto> createEvent(
+            @PathVariable("clubId") Long clubId,
+            @Valid @RequestBody EventDto eventDto) {
+        eventDto.setClubId(clubId);
         EventDto savedEvent = eventService.createEvent(eventDto);
         return new ResponseEntity<>(savedEvent, HttpStatus.CREATED);
     }
@@ -42,7 +47,7 @@ public class EventController {
         return eventService.findEventsByClubId(clubId);
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEvent(@PathVariable("id") Long id) {
         eventService.deleteEvent(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

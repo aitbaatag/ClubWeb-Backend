@@ -23,3 +23,27 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzY5N
 GET http://localhost:8080/api/clubs
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzY5NzA4NTUxLCJleHAiOjE3Njk3MTIxNTF9.7_uSoW9eGb-NoGvVpjiQAV8HBMGO8Bbi63sgSugxP7k
+
+###
+
+### Step 4: Create Event for Club ID 1 (tests permission - only owner or authorized users can create)
+POST http://localhost:8080/api/events/club/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzY5OTU4MzY3LCJleHAiOjE3Njk5NjE5Njd9.yrXKH7ax78UAap6AdjRVTS1a44xsEiT_qO0L_UUv5hQ
+
+{
+  "name": "Early Bird Run",
+  "location": "Central Park",
+  "description": "Join us for a refreshing morning run!",
+  "imageUrl": "https://example.com/event-image.jpg",
+  "startDtateTime": "2026-02-15T06:00:00",
+  "endDtateTime": "2026-02-15T07:00:00"
+}
+
+###
+
+### Step 5: Get All Events for Club 1
+GET http://localhost:8080/api/events/club/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzY5NzA4NTUxLCJleHAiOjE3Njk3MTIxNTF9.7_uSoW9eGb-NoGvVpjiQAV8HBMGO8Bbi63sgSugxP7k
+

@@ -39,5 +39,8 @@ public class CustomUserDetails implements UserDetails {
         return user;
     }
 
+    public Long getId() {
+        return user.getId();
+    }
 }
     // Default account flags - allow all (adjust if you add fields to User later)
