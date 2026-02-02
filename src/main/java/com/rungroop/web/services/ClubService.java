@@ -12,8 +12,12 @@ public interface ClubService  {
     ClubDto createClub(ClubDto clubDto, User currentUser);
     ClubDto updateClub(ClubDto clubDto);
     ClubDto findById(Long id);
+    ClubDto findById(Long id, Long userId); // Overload to include user context
 
     void deleteClub(Long id);
 
     List<ClubDto> searchClubs(String qury);
+
+    boolean joinClub(Long clubId, User user);
+    boolean leaveClub(Long clubId, User user);
 }

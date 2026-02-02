@@ -26,12 +26,16 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@Valid @RequestBody RegistrationDto userRegistrationDto) {
-        boolean isCreated = authService.Signup(userRegistrationDto);
+        try {
+            boolean isCreated = authService.Signup(userRegistrationDto);
 
-        if (isCreated) {
-            return ResponseEntity.ok("User registered successfully");
-        } else {
-            return ResponseEntity.badRequest().body("Failed to create user. Please try again.");
+            if (isCreated) {
+                return ResponseEntity.ok("User registered successfully");
+            } else {
+                return ResponseEntity.badRequest().body("Username or email already exists");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to create user: " + e.getMessage());
         }
     }
 

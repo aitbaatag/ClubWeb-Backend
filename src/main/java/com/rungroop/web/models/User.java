@@ -29,6 +29,11 @@ public class User {
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Club> clubs = new HashSet<>();
 
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private Set<ClubMember> memberships = new HashSet<>();
+
+
     @ManyToMany(fetch = FetchType.EAGER) // This for loading roles with user
     @JoinTable(
             name = "user_roles",

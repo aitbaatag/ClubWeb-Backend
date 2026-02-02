@@ -31,7 +31,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean Signup(RegistrationDto registrationDto) {
-        if (userRepository.findByUsername(registrationDto.getUsername()) != null) {
+        if (userRepository.findByUsername(registrationDto.getUsername()).isPresent()) {
             return false;
         }
 
@@ -40,6 +40,10 @@ public class AuthServiceImpl implements AuthService {
         }
 
         Role userRole = roleRepository.findByName("USER");
+
+        if (userRole == null) {
+            throw new RuntimeException("USER role not found in database");
+        }
 
         User user = new User();
         user.setUsername(registrationDto.getUsername());
@@ -66,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean existsByUsername(String username) {
-        return userRepository.findByUsername(username) != null;
+        return userRepository.findByUsername(username).isPresent();
     }
 
     @Override

@@ -33,6 +33,9 @@ public class Club {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "club", cascade = CascadeType.REMOVE)
+    private Set<ClubMember> members = new HashSet<>();
+
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)  // The user who created the club is the owner of the club
     private User owner;

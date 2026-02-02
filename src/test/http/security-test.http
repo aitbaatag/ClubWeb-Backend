@@ -2,12 +2,12 @@
 ### Step 1: Create a Club (requires authentication)
 POST http://localhost:8080/api/clubs/new
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzY5NzA4NTUxLCJleHAiOjE3Njk3MTIxNTF9.7_uSoW9eGb-NoGvVpjiQAV8HBMGO8Bbi63sgSugxP7k
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJLaGFsaWQiLCJpYXQiOjE3NzAwNDIzNDQsImV4cCI6MTc3MDA0NTk0NH0.mtl39SbGa7NBQM5yZglzF5hzyWaTMfxympd5Q_rkSjw
 
 {
-  "title": "Morning Runners",
-  "content": "We run every morning at 6 AM",
-  "photoUrl": "https://example.com/photo.jpg"
+  "title": "Football Club",
+  "content": "A club for football enthusiasts to play and discuss football.",
+  "imageUrl": "https://example.com/club-image.jpg"
 }
 
 ###
@@ -15,7 +15,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzY5N
 ### Step 2: Get Club by ID (use the ID from previous response)
 GET http://localhost:8080/api/clubs/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzY5NzA4NTUxLCJleHAiOjE3Njk3MTIxNTF9.7_uSoW9eGb-NoGvVpjiQAV8HBMGO8Bbi63sgSugxP7k
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzcwMDQxNzM0LCJleHAiOjE3NzAwNDUzMzR9.6HC8LtvVSPDOlbSmwRvHUv2Q_oAlzISWo2qjKqBjUI0
 
 ###
 
@@ -27,12 +27,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzY5N
 ###
 
 ### Step 4: Create Event for Club ID 1 (tests permission - only owner or authorized users can create)
-POST http://localhost:8080/api/events/club/3
+POST http://localhost:8080/api/events/club/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzY5OTU4MzY3LCJleHAiOjE3Njk5NjE5Njd9.yrXKH7ax78UAap6AdjRVTS1a44xsEiT_qO0L_UUv5hQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzcwMDQwOTk5LCJleHAiOjE3NzAwNDQ1OTl9.ydF5Mj__iukgFDX7tHOc6dDtwCK3i0a5bZMKbplChL8
 
 {
-  "name": "Early Bird Run",
+  "name": "Early Bird Run 2",
   "location": "Central Park",
   "description": "Join us for a refreshing morning run!",
   "imageUrl": "https://example.com/event-image.jpg",
@@ -45,5 +45,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzY5O
 ### Step 5: Get All Events for Club 1
 GET http://localhost:8080/api/events/club/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzY5NzA4NTUxLCJleHAiOjE3Njk3MTIxNTF9.7_uSoW9eGb-NoGvVpjiQAV8HBMGO8Bbi63sgSugxP7k
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzcwMDQwOTk5LCJleHAiOjE3NzAwNDQ1OTl9.ydF5Mj__iukgFDX7tHOc6dDtwCK3i0a5bZMKbplChL8
 

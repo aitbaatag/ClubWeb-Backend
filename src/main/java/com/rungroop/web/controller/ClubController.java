@@ -28,14 +28,42 @@ public class ClubController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ClubDto> getClubById(@PathVariable("id") Long id) {
-        ClubDto club = clubService.findById(id);
+    public ResponseEntity<ClubDto> getClubById(
+            @PathVariable("id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long userId = userDetails != null ? userDetails.getUser().getId() : null;
+        ClubDto club = userId != null ? clubService.findById(id, userId) : clubService.findById(id);
         return new ResponseEntity<>(club, HttpStatus.OK);
     }
+
     @PostMapping("/new")
     public ResponseEntity<ClubDto> createClub(@Valid @RequestBody ClubDto clubDto, @AuthenticationPrincipal CustomUserDetails userDetails) {
         ClubDto savedClub = clubService.createClub(clubDto, userDetails.getUser());
         return new ResponseEntity<>(savedClub, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{id}/join")
+    public ResponseEntity<String> joinClub(
+            @PathVariable("id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        boolean joined = clubService.joinClub(id, userDetails.getUser());
+        if (joined) {
+            return ResponseEntity.ok("Successfully joined the club");
+        } else {
+            return ResponseEntity.badRequest().body("Already a member of this club");
+        }
+    }
+
+    @PostMapping("/{id}/leave")
+    public ResponseEntity<String> leaveClub(
+            @PathVariable("id") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        boolean left = clubService.leaveClub(id, userDetails.getUser());
+        if (left) {
+            return ResponseEntity.ok("Successfully left the club");
+        } else {
+            return ResponseEntity.badRequest().body("Not a member of this club");
+        }
     }
 
     @GetMapping("/search")

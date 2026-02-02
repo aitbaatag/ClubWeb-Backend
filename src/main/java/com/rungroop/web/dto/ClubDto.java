@@ -23,4 +23,6 @@ public class ClubDto {
     private LocalDateTime updatedAt;
     private Long ownerId;
     private String ownerUsername;
+    private Integer memberCount;
+    private Boolean isMember;
 }

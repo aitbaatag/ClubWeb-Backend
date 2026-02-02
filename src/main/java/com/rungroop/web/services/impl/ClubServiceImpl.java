@@ -5,11 +5,9 @@ import com.rungroop.web.models.Club;
 import com.rungroop.web.models.User;
 import com.rungroop.web.repository.ClubRepository;
 import com.rungroop.web.repository.UserRepository;
-import com.rungroop.web.security.userdetails.CustomUserDetails;
+import com.rungroop.web.services.ClubMemberService;
 import com.rungroop.web.services.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +22,9 @@ public class ClubServiceImpl  implements ClubService {
     @Autowired
     private final UserRepository userRepository;
 
+    @Autowired
+    private ClubMemberService clubMemberService;
+
     public ClubServiceImpl(ClubRepository clubRepository, UserRepository userRepository) {
         this.clubRepository = clubRepository;
         this.userRepository = userRepository;
@@ -33,14 +34,21 @@ public class ClubServiceImpl  implements ClubService {
     public List<ClubDto> findAllClubs()
     {
         List<Club> clubs = clubRepository.findAll();
-        return clubs.stream().map(this::mapToClubDto).collect(Collectors.toList());
+        return clubs.stream().map(club -> mapToClubDto(club, null)).collect(Collectors.toList());
     }
 
     @Override
     public ClubDto findById(Long id) {
         Club club = clubRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Club not found with id: " + id));
-        return mapToClubDto(club);
+        return mapToClubDto(club, null);
+    }
+
+    @Override
+    public ClubDto findById(Long id, Long userId) {
+        Club club = clubRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Club not found with id: " + id));
+        return mapToClubDto(club, userId);
     }
 
     @Override
@@ -55,13 +63,13 @@ public class ClubServiceImpl  implements ClubService {
         Club club = mapToClub(clubDto);
         club.setOwner(currentUser);
         Club saved = clubRepository.save(club);
-        return mapToClubDto(saved);
+        return mapToClubDto(saved, currentUser.getId());
     }
 
     @Override
     public List<ClubDto> searchClubs(String qury) {
         List<Club> clubs = clubRepository.searchClubs(qury);
-        return clubs.stream().map(this::mapToClubDto).collect(Collectors.toList());
+        return clubs.stream().map(club -> mapToClubDto(club, null)).collect(Collectors.toList());
     }
 
     @Override
@@ -78,7 +86,17 @@ public class ClubServiceImpl  implements ClubService {
         existingClub.setContent(clubDto.getContent());
 
         Club updatedClub = clubRepository.save(existingClub);
-        return mapToClubDto(updatedClub);
+        return mapToClubDto(updatedClub, null);
+    }
+
+    @Override
+    public boolean joinClub(Long clubId, User user) {
+        return clubMemberService.joinClub(clubId, user);
+    }
+
+    @Override
+    public boolean leaveClub(Long clubId, User user) {
+        return clubMemberService.leaveClub(clubId, user);
     }
 
     private Club mapToClub(ClubDto clubDto) {
@@ -88,7 +106,11 @@ public class ClubServiceImpl  implements ClubService {
                 .content(clubDto.getContent())
                 .build();
     }
-    private ClubDto mapToClubDto(Club club) {
+
+    private ClubDto mapToClubDto(Club club, Long userId) {
+        int memberCount = clubMemberService.getMemberCount(club.getId());
+        Boolean isMember = userId != null ? clubMemberService.isMember(club.getId(), userId) : null;
+
         return ClubDto.builder()
                 .id(club.getId())
                 .title(club.getTitle())
@@ -98,6 +120,8 @@ public class ClubServiceImpl  implements ClubService {
                 .updatedAt(club.getUpdatedAt())
                 .ownerId(club.getOwner() != null ? club.getOwner().getId() : null)
                 .ownerUsername(club.getOwner() != null ? club.getOwner().getUsername() : null)
+                .memberCount(memberCount)
+                .isMember(isMember)
                 .build();
     }
 }
